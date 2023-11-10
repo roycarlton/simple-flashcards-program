@@ -1,5 +1,7 @@
 import os, random
 
+sets_dir = "card_sets"
+
 class Card:
     def __init__(self, filename):
         card_file = open(filename, "r")
@@ -19,9 +21,9 @@ def yn(text):
 #Display options for cards sets and asks user to select one
 def card_set_selection():
     options = []
-    search = os.listdir()
+    search = os.listdir(sets_dir)
     for item in search:
-        if os.path.isdir(item) and item[0] != ".":
+        if os.path.isdir(os.path.join(sets_dir, item)) and item[0] != ".":
             options.append(item)
 
     if len(options) > 0:
@@ -42,7 +44,7 @@ def card_set_selection():
             except ValueError:
                 print("Invalid input, please try again.")
 
-        return options[selection-1]
+        return os.path.join(sets_dir, options[selection-1])
 
     else:
         print("No card sets found, exiting program.")
@@ -84,14 +86,15 @@ def test(card_no, cards):
             print(title)
     print()
 
+if __name__ == "__main__":
 
-card_dir = card_set_selection()
+    card_dir = card_set_selection()
 
-card_no, cards = load_cards(card_dir)
+    card_no, cards = load_cards(card_dir)
 
-running = True
+    running = True
 
-while running:
-    test(card_no, cards)
-    if not(yn("Test again? (y/n) ")):
-        running = False
+    while running:
+        test(card_no, cards)
+        if not(yn("Test again? (y/n) ")):
+            running = False
